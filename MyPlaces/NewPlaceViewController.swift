@@ -9,14 +9,27 @@
 import UIKit
 
 class NewPlaceViewController: UITableViewController {
+    
+    var newPlace: Place?
+    var imageIsChanged = false
 
-    @IBOutlet var imageOfPlace: UIImageView!
+    @IBOutlet var saveButton: UIBarButtonItem!
+    
+    @IBOutlet var placeImage: UIImageView!
+    @IBOutlet var placeName: UITextField!
+    @IBOutlet var placeLocation: UITextField!
+    @IBOutlet var placeType: UITextField!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Скрываем лишние сепараторы
         tableView.tableFooterView = UIView()
+        // Делаем кнопку Save  неактивной по умолчанию
+        saveButton.isEnabled = false
+        
+        placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
   
     }
     
@@ -35,13 +48,17 @@ class NewPlaceViewController: UITableViewController {
             let camera = UIAlertAction(title: "Camera", style: .default) { _ in
                 self.chooseImagePicker(source: .camera) // !!!!  В Info.plist нужно добавить ключ NSCameraUsageDescription со значением $(PRODUCT_NAME) photo use
             }
+            // Добавил иконку для пункта Camera
             camera.setValue(cameraIcon, forKey: "Image")
+            // Выровнял текст для по левому краю
             camera.setValue(CATextLayerAlignmentMode.left, forKey: "titleTextAlignment")
             
             let photo = UIAlertAction(title: "Photo", style: .default) {_ in
                 self.chooseImagePicker(source: .photoLibrary)
             }
+            // Добавил иконку для пункта Photo
             photo.setValue(photoIcon, forKey: "Image")
+            // Выровнял текст для по левому краю
             photo.setValue(CATextLayerAlignmentMode.left, forKey: "titleTextAlignment")
             
             let cancel = UIAlertAction(title: "Cancel", style: .cancel)
@@ -56,6 +73,28 @@ class NewPlaceViewController: UITableViewController {
             view.endEditing(true)
         }
     }
+    
+    func saveNewPlace() {
+        
+        var image: UIImage?
+        
+        if imageIsChanged {
+            image = placeImage.image
+        } else {
+            image = #imageLiteral(resourceName: "imagePlaceholder")
+        }
+        
+        newPlace = Place(name: placeName.text!,
+                         location: placeLocation.text,
+                         type: placeType.text,
+                         image: image,
+                         restaurantImage: nil)
+    }
+    
+    @IBAction func cancelAction(_ sender: Any) {
+        dismiss(animated: true)
+    }
+    
 }
 
 // MARK: Text field Delegate
@@ -67,6 +106,16 @@ extension NewPlaceViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    // Этот метод следит за тем, внесены ли данные в текстовое поле. Если внесены, то кнопка Save активна
+    @objc private func textFieldChanged() {
+        
+        if placeName.text?.isEmpty == false {
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
     }
 }
 
@@ -93,11 +142,13 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
     // В этом методе мы присваеваем аутлету imageOfPlace выбранное изображение
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         // Берем значение по ключу .editedImage и присвоили это значение, как UIImage свойству ImageOfPlace
-        imageOfPlace.image = info[.editedImage] as? UIImage
+        placeImage.image = info[.editedImage] as? UIImage
         // Далее работаем над форматом выбранного изображения
-        imageOfPlace.contentMode = .scaleAspectFill
+        placeImage.contentMode = .scaleAspectFill
         // Обрезаем по границам
-        imageOfPlace.clipsToBounds = true
+        placeImage.clipsToBounds = true
+        
+        imageIsChanged = true
         // Закрываем ImagePickerController
         dismiss(animated: true)
     }

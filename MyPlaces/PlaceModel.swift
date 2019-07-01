@@ -6,13 +6,14 @@
 //  Copyright © 2019 Denis Movshovich. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct Place {
     var name: String
-    var location: String
-    var type: String
-    var image: String
+    var location: String?
+    var type: String?
+    var image: UIImage?
+    var restaurantImage: String?
     
     static let restauranNames = ["Burger King", "Шок", "Бочка", "Индокитай", "Sushi House", "Пепперони", "Sherlock's Pub", "Kitchen", "Love&Life", "Speak Easy", "Балкан Гриль"]
     
@@ -21,7 +22,7 @@ struct Place {
         var places = [Place]()
         
         for place in restauranNames {
-            places.append(Place(name: place, location: "Казань", type: "Ресторан", image: place))
+            places.append(Place(name: place, location: "Казань", type: "Ресторан", image: nil, restaurantImage: place))
         }
         return places
     }
