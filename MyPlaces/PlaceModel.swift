@@ -6,25 +6,35 @@
 //  Copyright © 2019 Denis Movshovich. All rights reserved.
 //
 
-import UIKit
+import RealmSwift
 
-struct Place {
-    var name: String
-    var location: String?
-    var type: String?
-    var image: UIImage?
-    var restaurantImage: String?
+class Place: Object {
     
-    static let restauranNames = ["Burger King", "Шок", "Бочка", "Индокитай", "Sushi House", "Пепперони", "Sherlock's Pub", "Kitchen", "Love&Life", "Speak Easy", "Балкан Гриль"]
+    @objc dynamic var name = ""
+    @objc dynamic var location: String?
+    @objc dynamic var type: String?
+    @objc dynamic var imageData: Data?
     
-    static func getPlaces() -> [Place] {
-        
-        var places = [Place]()
+    let restauranNames = ["Burger King", "Шок", "Бочка", "Индокитай", "Sushi House", "Пепперони", "Sherlock's Pub", "Kitchen", "Love&Life", "Speak Easy", "Балкан Гриль"]
+    
+    func savePlaces() {
         
         for place in restauranNames {
-            places.append(Place(name: place, location: "Казань", type: "Ресторан", image: nil, restaurantImage: place))
+            // Создал свойство, которое принимает изображение по названию изображения
+            let image = UIImage(named: place)
+            // Конвертирую UIImage в Data
+            guard let imageData = image?.pngData() else { return }
+            // Создал экземпляр модели Place
+            let newPlace = Place()
+            // Присвоил значения свойства экземпляра
+            newPlace.name = place
+            newPlace.location = "Казань"
+            newPlace.type = "Ресторан"
+            newPlace.imageData = imageData
+
+            StorageManager.saveObject(place: newPlace)
         }
-        return places
+        
     }
 }
 
