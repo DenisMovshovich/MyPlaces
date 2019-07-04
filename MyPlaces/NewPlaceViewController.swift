@@ -10,8 +10,7 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
-    // Создаем экземпляр модели Place
-    var newPlace = Place()
+    
     // Вспомогательное свойство, нужное для замены изображения, если пользователь решит добавить свое фото
     var imageIsChanged = false
 
@@ -25,16 +24,11 @@ class NewPlaceViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Реаллизую доступ к объекту сразу же, как он появляется в базе, без обновления интерфейса
-        DispatchQueue.main.async {
-            self.newPlace.savePlaces()
-        }
         
         // Скрываем лишние сепараторы
         tableView.tableFooterView = UIView()
         // Делаем кнопку Save  неактивной по умолчанию
         saveButton.isEnabled = false
-        
         // Каждый раз при редактировании текстового поля Name будет вызываться этот метод, который в свою очередь вызывает метод textFieldChanged, который будет следить за тем было ли изменено текстовое поле Name (его реализация ниже)
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
   
@@ -92,11 +86,15 @@ class NewPlaceViewController: UITableViewController {
             image = #imageLiteral(resourceName: "imagePlaceholder")
         }
         
-//        newPlace = Place(name: placeName.text!,
-//                         location: placeLocation.text,
-//                         type: placeType.text,
-//                         image: image,
-//                         restaurantImage: nil)
+        let imageData = image?.pngData()
+        
+        let newPlace = Place(name: placeName.text!,
+                             location: placeLocation.text,
+                             type: placeType.text,
+                             imageData: imageData)
+        
+        StorageManager.saveObject(place: newPlace )
+        
     }
     
     // При нажатии на кнопку Cancel произойдет возврат на главный экран

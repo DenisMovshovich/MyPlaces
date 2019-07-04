@@ -16,7 +16,14 @@ class StorageManager {
     static func saveObject(place: Place) {
         // Реализация метода для сохранения объектов в базе данных
         try! realm.write {
-           realm.add(place)
+            realm.add(place)
+        }
+    }
+    // Метод для удаления объекта из базы данных
+    static func deleteObject(place: Place) {
+        // Реализация
+        try! realm.write {
+            realm.delete(place)
         }
     }
 }
