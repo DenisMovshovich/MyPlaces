@@ -10,7 +10,7 @@ import UIKit
 
 class NewPlaceViewController: UITableViewController {
     
-    
+    var currentPlace: Place?
     // Вспомогательное свойство, нужное для замены изображения, если пользователь решит добавить свое фото
     var imageIsChanged = false
 
@@ -31,6 +31,7 @@ class NewPlaceViewController: UITableViewController {
         saveButton.isEnabled = false
         // Каждый раз при редактировании текстового поля Name будет вызываться этот метод, который в свою очередь вызывает метод textFieldChanged, который будет следить за тем было ли изменено текстовое поле Name (его реализация ниже)
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
+        setupEditScreen()
   
     }
     
@@ -75,9 +76,9 @@ class NewPlaceViewController: UITableViewController {
         }
     }
     
-    func saveNewPlace() {
+    func savePlace() {
         
-        // Свойство нужное для определения было ли добавлено фото пользователем
+        // Свойство, нужное для определения было ли добавлено фото пользователем
         var image: UIImage?
         
         if imageIsChanged {
@@ -93,15 +94,49 @@ class NewPlaceViewController: UITableViewController {
                              type: placeType.text,
                              imageData: imageData)
         
-        StorageManager.saveObject(place: newPlace )
-        
+        if currentPlace != nil {
+            try! realm.write {
+                currentPlace?.name = newPlace.name
+                currentPlace?.location = newPlace.location
+                currentPlace?.type = newPlace.type
+                currentPlace?.imageData = newPlace.imageData
+            }
+        } else {
+            StorageManager.saveObject(place: newPlace )
+        }
+    }
+    
+    // Метод, который
+    private func setupEditScreen() {
+        // проверяем есть ли значение в выбранной ячейке
+        if currentPlace != nil {
+            setupNavigationBar()
+            imageIsChanged = true
+            // Конвертируем тип Data в UIImage
+            guard let data = currentPlace?.imageData, let image = UIImage(data: data) else { return }
+            
+            // Присваиваем значения
+            placeImage.image = image
+            placeImage.contentMode = .scaleAspectFill
+            placeName.text = currentPlace?.name
+            placeLocation.text = currentPlace?.location
+            placeType.text = currentPlace?.type
+        }
+    }
+    
+    private func setupNavigationBar() {
+        if let topItem = navigationController?.navigationBar.topItem {
+            topItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        }
+        navigationItem.leftBarButtonItem = nil
+        title = currentPlace?.name
+        saveButton.isEnabled = true
     }
     
     // При нажатии на кнопку Cancel произойдет возврат на главный экран
     @IBAction func cancelAction(_ sender: Any) {
         dismiss(animated: true)
     }
-    
 }
 
 // MARK: Text field Delegate
