@@ -25,4 +25,5 @@ class Place: Object {
     }
 }
 
-
+// тест
+// хмхмхм
