@@ -16,6 +16,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var reversedSortingButton: UIBarButtonItem!
     
     var places: Results<Place>!
+    var ascendingSorting = true // логическое свойство для сортировки по возрастанию
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,9 +97,31 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @IBAction func sortSelection(_ sender: UISegmentedControl) {
+        
+        sorting()
     }
     
     @IBAction func reversedSorting(_ sender: Any) {
+        
+        ascendingSorting.toggle() // Меняем значение на противоположное
+        // Меняем изображение кнопки
+        if ascendingSorting {
+            reversedSortingButton.image = #imageLiteral(resourceName: "AZ")
+        } else {
+            reversedSortingButton.image = #imageLiteral(resourceName: "ZA")
+        }
+        
+        sorting()
     }
-    
+    // Метод для сортировки ячеек
+    private func sorting() {
+        
+        if segmentedControl.selectedSegmentIndex == 0 {
+            places = places.sorted(byKeyPath: "date", ascending: ascendingSorting)
+        } else {
+            places = places.sorted(byKeyPath: "name", ascending: ascendingSorting)
+        }
+        
+        tableView.reloadData()
+    }
 }
