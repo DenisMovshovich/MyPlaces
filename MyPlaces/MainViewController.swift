@@ -11,30 +11,63 @@ import RealmSwift
 
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    private let searchController = UISearchController(searchResultsController: nil)
+    private var places: Results<Place>!
+    private var filteredPlaces: Results<Place>!
+    private var ascendingSorting = true
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
+    
+    
     @IBOutlet var tableView: UITableView!
     @IBOutlet var segmentedControl: UISegmentedControl!
     @IBOutlet var reversedSortingButton: UIBarButtonItem!
-    
-    var places: Results<Place>!
-    var ascendingSorting = true // логическое свойство для сортировки по возрастанию
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         places = realm.objects(Place.self)
         
+        // Настройка search Contoller
+        
+        // Назначенм наш класс получателем информации об изменении текста в строке поиска
+        searchController.searchResultsUpdater = self
+        // Разрешаем взаимодействие с результатом поиска
+        searchController.obscuresBackgroundDuringPresentation = false
+        // Название строки поиска
+        searchController.searchBar.placeholder = "Search"
+        // Прикрепляем search Controller в Navigation Bar
+        navigationItem.searchController = searchController
+        // Скрываем строку поиска при переходе на другой экран
+        definesPresentationContext = true
+        
     }
     
     // MARK: - Table view data source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if isFiltering {
+            return filteredPlaces.count
+        }
         return places.isEmpty ? 0 : places.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomTableViewCell
         
-        let place = places[indexPath.row]
+        var place = Place()
+        
+        if isFiltering {
+            place = filteredPlaces[indexPath.row]
+        } else {
+            place = places[indexPath.row]
+        }
         
         cell.nameLabel?.text = place.name
         cell.locationLabel?.text = place.location
@@ -55,7 +88,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let place = places[indexPath.row]
         // создаем объект класса, которые выполняет действия с ячейкой
-        let deleteAction = UITableViewRowAction(style: .default, title: "Нахуй с пляжа") { (_, _) in
+        let deleteAction = UITableViewRowAction(style: .default, title: "Delete") { (_, _) in
             // Удаление объекта из DB
             StorageManager.deleteObject(place: place)
             // Удаление объекта из списка на главном экране 
@@ -75,8 +108,14 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         if segue.identifier == "showDetail" {
             // находим индекс выбранной ячейки
             guard let indexPath = tableView.indexPathForSelectedRow else { return }
-            // имея индекс извлекаем объект выбранной ячейки
-            let place = places[indexPath.row]
+            // имея индекс извлекаем объект выбранной ячейки, проверяя активна ли строка поиска
+            let place: Place
+            if isFiltering {
+                place = filteredPlaces[indexPath.row]
+            } else {
+                place = places[indexPath.row]
+            }
+            
             // создаем экземпляр NewPlaceViewController
             let newPlaceVC = segue.destination as! NewPlaceViewController
             // Присваиваем данные выбранного заведения
@@ -121,6 +160,20 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             places = places.sorted(byKeyPath: "name", ascending: ascendingSorting)
         }
+        
+        tableView.reloadData()
+    }
+}
+
+extension MainViewController: UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+    
+    private func filterContentForSearchText(_ searchText: String) {
+        
+        filteredPlaces = places.filter("name CONTAINS[c] %@ OR location CONTAINS[c] %@", searchText, searchText)
         
         tableView.reloadData()
     }
