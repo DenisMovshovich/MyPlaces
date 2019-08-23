@@ -26,7 +26,10 @@ class NewPlaceViewController: UITableViewController {
         super.viewDidLoad()
         
         // Скрываем лишние сепараторы
-        tableView.tableFooterView = UIView()
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0,
+                                                         y: 0,
+                                                         width: tableView.frame.size.width,
+                                                         height: 1))
         // Делаем кнопку Save  неактивной по умолчанию
         saveButton.isEnabled = false
         // Каждый раз при редактировании текстового поля Name будет вызываться этот метод, который в свою очередь вызывает метод textFieldChanged, который будет следить за тем было ли изменено текстовое поле Name (его реализация ниже)

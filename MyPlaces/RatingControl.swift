@@ -12,6 +12,12 @@ import UIKit
     
     // MARK: Свойства
     
+    var rating = 0 {
+        didSet {
+            updateButtonSelectionState()
+        }
+    }
+    
     private var ratingButtons = [UIButton]()
     //Размер кнопки
     // @IBInspectable необходимо для редактирования свойств в storyboard (тип свойства необходимо указать явно!)
@@ -28,7 +34,6 @@ import UIKit
         }
     }
     
-    var rating = 0
     
     //MARK: Инициализация
     
@@ -45,7 +50,17 @@ import UIKit
     // MARK: Button Action
     
     @objc func ratingButtonTapped(button: UIButton) {
-        print("Button pressed 🤘🏻")
+        // Определяем индекс кнопки, которой касается пользователь
+        guard let index = ratingButtons.firstIndex(of: button) else { return }
+        
+        // Calculate the rating of the selected button
+        let selectedRating = index + 1
+        
+        if selectedRating == rating { // Если номер выбранной звезды будет совпадать с текущим рейтингом, то обнуляем рейтинг
+            rating = 0
+        } else { // В противном случае присваиваем рейтингу значение  выбранной звезды
+            rating = selectedRating
+        }
     }
     
     
@@ -60,11 +75,31 @@ import UIKit
         
         ratingButtons.removeAll()
         
+        // Load button image
+        let bundle = Bundle(for: type(of: self))
+        let filledStar = UIImage(named: "filledStar",
+                                 in: bundle,
+                                 compatibleWith: self.traitCollection)
+        
+        let emptyStar = UIImage(named: "emptyStar",
+                                in: bundle,
+                                compatibleWith: self.traitCollection)
+        
+        let hightlightedStar = UIImage(named: "hightlightedStar",
+                                       in: bundle,
+                                       compatibleWith: self.traitCollection)
+        
+        
         for _ in 0..<starCount {
             
             // Создаю кнопку
             let button = UIButton()
-            button.backgroundColor = #colorLiteral(red: 0.5300177932, green: 0.0657126382, blue: 0.000567090814, alpha: 1)
+            
+            // Set the button image
+            button.setImage(emptyStar, for: .normal) // обычное состояние кнопки, когда она не выделена, не нажата и не в фокусе
+            button.setImage(filledStar, for: .selected) // кнопка выделена
+            button.setImage(hightlightedStar, for: .highlighted) // выделение кнопки при прикосновении
+            button.setImage(hightlightedStar, for: [.highlighted, .selected]) // выделение кнопки при прикосновении(синим) и при выделении(черным)
             
             // Add constraints
             
@@ -82,6 +117,14 @@ import UIKit
             
             // Add the new button on the rating button array
             ratingButtons.append(button)
+        }
+        
+        updateButtonSelectionState()
+    }
+    
+    private func updateButtonSelectionState() {
+        for (index, button) in ratingButtons.enumerated() {
+            button.isSelected = index < rating
         }
     }
 }
