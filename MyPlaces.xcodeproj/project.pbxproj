@@ -18,6 +18,7 @@
 		A4AC775F22BD60F200722B0A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4AC775E22BD60F200722B0A /* Assets.xcassets */; };
 		A4AC776222BD60F200722B0A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4AC776022BD60F200722B0A /* LaunchScreen.storyboard */; };
 		A4CA0CAB22C02BCB002F1FB5 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CA0CAA22C02BCB002F1FB5 /* MainViewController.swift */; };
+		A4DC84792315E813009C3B26 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC84782315E813009C3B26 /* MapViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		A4AC776122BD60F200722B0A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A4AC776322BD60F200722B0A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4CA0CAA22C02BCB002F1FB5 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		A4DC84782315E813009C3B26 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		E6A2A0018A09D5B1317F7237 /* Pods-MyPlaces.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyPlaces.debug.xcconfig"; path = "Target Support Files/Pods-MyPlaces/Pods-MyPlaces.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +97,7 @@
 				A41B304122CC07AD0011EAB2 /* StorageManager.swift */,
 				A4882FC922C764320066BDF4 /* CustomTableViewCell.swift */,
 				A42A531422F86653004882BE /* RatingControl.swift */,
+				A4DC84782315E813009C3B26 /* MapViewController.swift */,
 				A4AC775B22BD60F000722B0A /* Main.storyboard */,
 				A4AC775E22BD60F200722B0A /* Assets.xcassets */,
 				A4AC776022BD60F200722B0A /* LaunchScreen.storyboard */,
@@ -225,6 +228,7 @@
 				A41B304222CC07AD0011EAB2 /* StorageManager.swift in Sources */,
 				A4AC775822BD60F000722B0A /* AppDelegate.swift in Sources */,
 				A4CA0CAB22C02BCB002F1FB5 /* MainViewController.swift in Sources */,
+				A4DC84792315E813009C3B26 /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
