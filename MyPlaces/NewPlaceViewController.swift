@@ -80,6 +80,18 @@ class NewPlaceViewController: UITableViewController {
         }
     }
     
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier != "showMap" {
+            return
+        }
+        // Создаю объект класса MapViewController
+        let mapVC = segue.destination as! MapViewController
+        // Присваиваю свойству place этого объекта значение currentPlace(выбранного заведения)
+        mapVC.place = currentPlace
+    }
+    
     func savePlace() {
         
         // Свойство, нужное для определения было ли добавлено фото пользователем

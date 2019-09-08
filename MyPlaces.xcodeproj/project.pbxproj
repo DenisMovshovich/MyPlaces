@@ -91,11 +91,11 @@
 			isa = PBXGroup;
 			children = (
 				A4AC775722BD60F000722B0A /* AppDelegate.swift */,
-				A4CA0CAA22C02BCB002F1FB5 /* MainViewController.swift */,
-				A49155A222CA43DF00838467 /* NewPlaceViewController.swift */,
 				A4882FCB22C7D53D0066BDF4 /* PlaceModel.swift */,
 				A41B304122CC07AD0011EAB2 /* StorageManager.swift */,
+				A4CA0CAA22C02BCB002F1FB5 /* MainViewController.swift */,
 				A4882FC922C764320066BDF4 /* CustomTableViewCell.swift */,
+				A49155A222CA43DF00838467 /* NewPlaceViewController.swift */,
 				A42A531422F86653004882BE /* RatingControl.swift */,
 				A4DC84782315E813009C3B26 /* MapViewController.swift */,
 				A4AC775B22BD60F000722B0A /* Main.storyboard */,
