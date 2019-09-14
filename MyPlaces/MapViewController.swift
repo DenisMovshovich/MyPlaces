@@ -6,13 +6,19 @@
 //  Copyright © 2019 Denis Movshovich. All rights reserved.
 //
 
+// UIKit :)
 import UIKit
+// Для работы с картами
 import MapKit
+// для работы с местоположением пользователя
+import CoreLocation
 
 class MapViewController: UIViewController {
 
     var place = Place()
     let annotationIdentifier = "annotationIdentifier"
+    // Отвечает за настройку и управление службами геолокации
+    let locationManager = CLLocationManager()
     
     @IBOutlet var mapView: MKMapView!
     
@@ -21,8 +27,9 @@ class MapViewController: UIViewController {
         // Назначаем наш класс делегатом ответсвенным за выполнение методов протокола MKMapViewDelegate
         mapView.delegate = self
         setupPlacemark()
-
+        checkLocationServices()
     }
+    
     @IBAction func closeVC() {
         dismiss(animated: true)
     }
@@ -58,11 +65,51 @@ class MapViewController: UIViewController {
             // Чтобы выделить созданную аннотацию...
             self.mapView.selectAnnotation(annotation, animated: true)
             
-            
-            
-            
         }
     }
+    
+    // Здесь проверяем включена ли у нас служба геолокации
+    private func checkLocationServices() {
+        
+        if CLLocationManager.locationServicesEnabled() {
+            setupLocationManager()
+            checkLocationAutorization()
+        } else {
+            // ДЗ!!!!! Создать алерт контроллер   // Show alert controller
+
+        }
+        
+    }
+    
+    // делаем первоначальные установки свойства locationManager
+    private func setupLocationManager() {
+        locationManager.delegate = self
+        // Точность определения местоположения пользователя
+         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    }
+    
+    // Проверяем статус на разрешение использования геопозиции
+    private func checkLocationAutorization() {
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedWhenInUse: // Приложение разрешено определять геолокацию во время его использования
+            mapView.showsUserLocation = true
+            break
+        case .denied: // Приложению отказано использовать службы геолокации или она отключена
+            // Show alert controller
+            break
+        case .notDetermined: // Статус неопределен. Запрашиваем разрешение на авторизацию приложения для использвания геолокации
+            locationManager.requestWhenInUseAuthorization()
+            break
+        case .restricted:
+            break // когда приложение не авторизовано для использования служб геолокации
+            // Show alert controller
+        case .authorizedAlways: // когда приложению разрешено использовать службы геолокации постоянно
+            break
+        @unknown default:
+            print("New case is available")
+        }
+    }
+    
 }
 
 // MKMapViewDelegate содержит методы для более тонкой работы с картами
@@ -95,5 +142,13 @@ extension MapViewController: MKMapViewDelegate {
         }
         // Возвращаем этот объект
         return annotationView
+    }
+}
+
+// Расширение для отслеживания местоположения в реальном времени
+extension MapViewController: CLLocationManagerDelegate {
+    // Данный метод вызывается при каждом изменении статуса авторизации нашего приложения для использования служб геолокации
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        checkLocationAutorization()
     }
 }
