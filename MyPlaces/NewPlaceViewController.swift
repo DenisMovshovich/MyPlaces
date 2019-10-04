@@ -90,6 +90,8 @@ class NewPlaceViewController: UITableViewController {
             else { return }
         
         mapVC.incomeSegueIdentifier = identifier
+        // Назначаем ответсвенного за выполнение метода протокола MapViewControllerDelegate сам класс NewPlaceViewController
+        mapVC.MapViewControllerDelegate = self
         
         if identifier == "showPlace" {
             mapVC.place.name = placeName.text!
@@ -214,5 +216,14 @@ extension NewPlaceViewController: UIImagePickerControllerDelegate, UINavigationC
         // Закрываем ImagePickerController
         dismiss(animated: true)
     }
+    
+}
+
+// Расширение для получения адреса из MapViewController
+extension NewPlaceViewController: MapViewControllerDelegate {
+    func getAddress(_ address: String?) {
+        placeLocation.text = address
+    }
+    
     
 }

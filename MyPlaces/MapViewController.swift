@@ -13,8 +13,16 @@ import MapKit
 // для работы с местоположением пользователя
 import CoreLocation
 
+// Данные протокол использован для передачи адреса из выбранного на карте в поле placeLocation в NewPlaceViewController
+protocol MapViewControllerDelegate {
+    // Метод для захвата адреса
+    func getAddress(_ address: String?)
+}
+
 class MapViewController: UIViewController {
 
+    // Делегат класса MapViewController
+    var MapViewControllerDelegate: MapViewControllerDelegate?
     var place = Place()
     let annotationIdentifier = "annotationIdentifier"
     // Отвечает за настройку и управление службами геолокации
@@ -48,7 +56,9 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func doneButtonPressed() {
-        
+        // Захват адреса изи addressLabel для передачи в NewPlaceNewController
+        MapViewControllerDelegate?.getAddress(addressLabel.text)
+        dismiss(animated: true)
         
     }
     
