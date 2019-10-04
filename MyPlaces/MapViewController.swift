@@ -4,7 +4,7 @@
 //
 //  Created by Denis Movshovich on 28/08/2019.
 //  Copyright © 2019 Denis Movshovich. All rights reserved.
-//
+
 
 // UIKit :)
 import UIKit
@@ -19,6 +19,7 @@ class MapViewController: UIViewController {
     let annotationIdentifier = "annotationIdentifier"
     // Отвечает за настройку и управление службами геолокации
     let locationManager = CLLocationManager()
+    let regionInMeters = 10_000.00
     
     @IBOutlet var mapView: MKMapView!
     
@@ -30,11 +31,26 @@ class MapViewController: UIViewController {
         checkLocationServices()
     }
     
+
+    // Центрирование View по геолокации
+    
+    @IBAction func centerViewInUserLocation() {
+        
+        if let location = locationManager.location?.coordinate {
+            let region = MKCoordinateRegion(center: location,
+                               latitudinalMeters: regionInMeters,
+                               longitudinalMeters: regionInMeters)
+            mapView.setRegion(region, animated: true)
+        }
+    }
+    
     @IBAction func closeVC() {
         dismiss(animated: true)
     }
     
     // Функция для оторажения маркера на карте
+    
+    
     private func setupPlacemark() {
         // Извлекаем адрес заведения
         guard let location = place.location else { return }
@@ -47,7 +63,7 @@ class MapViewController: UIViewController {
                 print(error)
                 return
             }
-            // Если ошибки нет, то извелекаю опционал из объекта placemarks
+            // Если ошибки нет, то извлекаю опционал из объекта placemarks
             guard let placemarks = placemarks else { return }
             // Так как, мы ищем местопложение по конкретному адресу, то массив placemarks должен создержать всего одну метку("первый элемент")
             let placemark = placemarks.first
@@ -75,10 +91,12 @@ class MapViewController: UIViewController {
             setupLocationManager()
             checkLocationAutorization()
         } else {
-            // ДЗ!!!!! Создать алерт контроллер   // Show alert controller
-
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.showAlert(
+                    title: "Your Location is not Available",
+                    message: "To give permission Go to: Setting -> MyPlaces -> Location")
+            }
         }
-        
     }
     
     // делаем первоначальные установки свойства locationManager
@@ -95,11 +113,16 @@ class MapViewController: UIViewController {
             mapView.showsUserLocation = true
             break
         case .denied: // Приложению отказано использовать службы геолокации или она отключена
-            // Show alert controller
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.showAlert(
+                    title: "Your Location is not Available",
+                    message: "To give permission Go to: Setting -> MyPlaces -> Location"
+                )
+            }
             break
         case .notDetermined: // Статус неопределен. Запрашиваем разрешение на авторизацию приложения для использвания геолокации
             locationManager.requestWhenInUseAuthorization()
-            break
+            
         case .restricted:
             break // когда приложение не авторизовано для использования служб геолокации
             // Show alert controller
@@ -108,6 +131,15 @@ class MapViewController: UIViewController {
         @unknown default:
             print("New case is available")
         }
+    }
+    
+    private func showAlert(title: String, message: String) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
     
 }

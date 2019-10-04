@@ -236,15 +236,28 @@
                                     <action selector="closeVC" destination="7XK-eX-v5I" eventType="touchUpInside" id="uNe-ye-GTr"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hYe-vp-gr6">
+                                <rect key="frame" x="328" y="792" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="6SC-Ml-L7w"/>
+                                    <constraint firstAttribute="height" constant="50" id="TB5-Ie-iHX"/>
+                                </constraints>
+                                <state key="normal" image="Location"/>
+                                <connections>
+                                    <action selector="centerViewInUserLocation" destination="7XK-eX-v5I" eventType="touchUpInside" id="G5B-ne-Mrm"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="kgL-Yh-VHF" firstAttribute="trailing" secondItem="7aK-PX-9um" secondAttribute="trailing" constant="40" id="G1N-5i-Gid"/>
                             <constraint firstItem="7aK-PX-9um" firstAttribute="top" secondItem="kgL-Yh-VHF" secondAttribute="top" constant="40" id="MkL-u2-eha"/>
+                            <constraint firstItem="kgL-Yh-VHF" firstAttribute="bottom" secondItem="hYe-vp-gr6" secondAttribute="bottom" constant="20" id="NkJ-6U-aOE"/>
                             <constraint firstAttribute="bottom" secondItem="ASw-gQ-Z9i" secondAttribute="bottom" id="RXp-Te-Hxi"/>
                             <constraint firstItem="ASw-gQ-Z9i" firstAttribute="leading" secondItem="kgL-Yh-VHF" secondAttribute="leading" id="XKX-O4-qKN"/>
                             <constraint firstItem="ASw-gQ-Z9i" firstAttribute="trailing" secondItem="kgL-Yh-VHF" secondAttribute="trailing" id="baa-XV-mHs"/>
                             <constraint firstItem="ASw-gQ-Z9i" firstAttribute="top" secondItem="S22-wi-VpU" secondAttribute="top" id="iTo-It-Xdn"/>
+                            <constraint firstItem="kgL-Yh-VHF" firstAttribute="trailing" secondItem="hYe-vp-gr6" secondAttribute="trailing" constant="36" id="tG4-Zy-OFT"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kgL-Yh-VHF"/>
                     </view>
@@ -431,6 +444,7 @@
     </scenes>
     <resources>
         <image name="AZ" width="25" height="24"/>
+        <image name="Location" width="128" height="128"/>
         <image name="Photo" width="194.66667175292969" height="195.66667175292969"/>
         <image name="cancel" width="128" height="128"/>
         <image name="emptyStar" width="255" height="256"/>
