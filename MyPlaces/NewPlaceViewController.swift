@@ -13,7 +13,7 @@ class NewPlaceViewController: UITableViewController {
     var currentPlace: Place!
     // Вспомогательное свойство, нужное для замены изображения, если пользователь решит добавить свое фото
     var imageIsChanged = false
-
+    
     @IBOutlet var saveButton: UIBarButtonItem!
     
     @IBOutlet var placeImage: UIImageView!
@@ -36,11 +36,11 @@ class NewPlaceViewController: UITableViewController {
         // Каждый раз при редактировании текстового поля Name будет вызываться этот метод, который в свою очередь вызывает метод textFieldChanged, который будет следить за тем было ли изменено текстовое поле Name (его реализация ниже)
         placeName.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         setupEditScreen()
-  
+        
     }
     
     // MARK: Table view Delegate
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         
@@ -83,15 +83,20 @@ class NewPlaceViewController: UITableViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier != "showMap" { return }
-        // Создаю объект класса MapViewController
-        let mapVC = segue.destination as! MapViewController
-        // Присваиваю свойству place этого объекта значения, заданные в текстовых полях
-        mapVC.place.name = placeName.text!
-        mapVC.place.location = placeLocation.text
-        mapVC.place.type = placeType.text
-        mapVC.place.imageData = placeImage.image?.pngData()
         
+        guard
+            let identifier = segue.identifier,
+            let mapVC = segue.destination as? MapViewController
+            else { return }
+        
+        mapVC.incomeSegueIdentifier = identifier
+        
+        if identifier == "showPlace" {
+            mapVC.place.name = placeName.text!
+            mapVC.place.location = placeLocation.text
+            mapVC.place.type = placeType.text
+            mapVC.place.imageData = placeImage.image?.pngData()
+        }
     }
     
     func savePlace() {
@@ -157,9 +162,9 @@ class NewPlaceViewController: UITableViewController {
 // MARK: Text field Delegate
 
 extension NewPlaceViewController: UITextFieldDelegate {
-
+    
     // Скрываем клавиатуру по нажатию на Done
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

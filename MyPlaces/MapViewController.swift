@@ -19,38 +19,49 @@ class MapViewController: UIViewController {
     let annotationIdentifier = "annotationIdentifier"
     // Отвечает за настройку и управление службами геолокации
     let locationManager = CLLocationManager()
-    let regionInMeters = 10_000.00
+    let regionInMeters = 1000.00
+    var incomeSegueIdentifier = ""
     
     @IBOutlet var mapView: MKMapView!
+    @IBOutlet var mapPinImage: UIImageView!
+    @IBOutlet var addressLabel: UILabel!
+    @IBOutlet var doneButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Назначаем наш класс делегатом ответсвенным за выполнение методов протокола MKMapViewDelegate
         mapView.delegate = self
-        setupPlacemark()
+        setupMapView()
         checkLocationServices()
     }
     
 
     // Центрирование View по геолокации
     
-    @IBAction func centerViewInUserLocation() {
-        
-        if let location = locationManager.location?.coordinate {
-            let region = MKCoordinateRegion(center: location,
-                               latitudinalMeters: regionInMeters,
-                               longitudinalMeters: regionInMeters)
-            mapView.setRegion(region, animated: true)
-        }
-    }
-    
     @IBAction func closeVC() {
         dismiss(animated: true)
     }
     
+    @IBAction func centerViewInUserLocation() {
+      showUserLocation()
+    }
+    
+    @IBAction func doneButtonPressed() {
+        
+        
+    }
+    
+    private func setupMapView() {
+        
+        if incomeSegueIdentifier == "showPlace" {
+            setupPlacemark()
+            mapPinImage.isHidden = true
+            addressLabel.isHidden = true
+            doneButton.isHidden = true
+            
+        }
+    }
     // Функция для оторажения маркера на карте
-    
-    
     private func setupPlacemark() {
         // Извлекаем адрес заведения
         guard let location = place.location else { return }
@@ -111,6 +122,7 @@ class MapViewController: UIViewController {
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse: // Приложение разрешено определять геолокацию во время его использования
             mapView.showsUserLocation = true
+            if incomeSegueIdentifier == "getAddress" { showUserLocation() }
             break
         case .denied: // Приложению отказано использовать службы геолокации или она отключена
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -131,6 +143,17 @@ class MapViewController: UIViewController {
         @unknown default:
             print("New case is available")
         }
+    }
+    
+    private func showUserLocation() {
+    
+    if let location = locationManager.location?.coordinate {
+    let region = MKCoordinateRegion(center: location,
+    latitudinalMeters: regionInMeters,
+    longitudinalMeters: regionInMeters)
+    mapView.setRegion(region, animated: true)
+    }
+    
     }
     
     private func showAlert(title: String, message: String) {
