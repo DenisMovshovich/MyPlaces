@@ -267,6 +267,12 @@
                                     <constraint firstAttribute="height" constant="40" id="ucV-mN-jYu"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Address" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="rLN-PH-Gst">
+                                <rect key="frame" x="20" y="145" width="374" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TgL-M6-zOL">
                                 <rect key="frame" x="172.66666666666666" y="774" width="69" height="48"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
@@ -277,12 +283,17 @@
                                     <action selector="doneButtonPressed" destination="7XK-eX-v5I" eventType="touchUpInside" id="Orl-1Z-HBp"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Address" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="rLN-PH-Gst">
-                                <rect key="frame" x="20" y="145" width="374" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R1v-xN-nnf">
+                                <rect key="frame" x="182" y="772" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="9Rg-WV-xLa"/>
+                                    <constraint firstAttribute="height" constant="50" id="G7d-Eq-89a"/>
+                                </constraints>
+                                <state key="normal" image="GetDirection"/>
+                                <connections>
+                                    <action selector="goButtonPressed" destination="7XK-eX-v5I" eventType="touchUpInside" id="Xuk-VL-qwA"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -296,7 +307,9 @@
                             <constraint firstItem="7aK-PX-9um" firstAttribute="top" secondItem="kgL-Yh-VHF" secondAttribute="top" constant="40" id="MkL-u2-eha"/>
                             <constraint firstItem="rLN-PH-Gst" firstAttribute="leading" secondItem="kgL-Yh-VHF" secondAttribute="leading" constant="20" id="NXY-tN-GI1"/>
                             <constraint firstAttribute="bottom" secondItem="ASw-gQ-Z9i" secondAttribute="bottom" id="RXp-Te-Hxi"/>
+                            <constraint firstItem="kgL-Yh-VHF" firstAttribute="bottom" secondItem="R1v-xN-nnf" secondAttribute="bottom" constant="40" id="Vwr-CD-emZ"/>
                             <constraint firstItem="ASw-gQ-Z9i" firstAttribute="leading" secondItem="kgL-Yh-VHF" secondAttribute="leading" id="XKX-O4-qKN"/>
+                            <constraint firstItem="R1v-xN-nnf" firstAttribute="centerX" secondItem="S22-wi-VpU" secondAttribute="centerX" id="Yh7-wO-Ddn"/>
                             <constraint firstItem="TgL-M6-zOL" firstAttribute="centerX" secondItem="ASw-gQ-Z9i" secondAttribute="centerX" id="Yt4-Gf-Z47"/>
                             <constraint firstItem="ASw-gQ-Z9i" firstAttribute="trailing" secondItem="kgL-Yh-VHF" secondAttribute="trailing" id="baa-XV-mHs"/>
                             <constraint firstItem="0Bk-ej-gFu" firstAttribute="centerX" secondItem="S22-wi-VpU" secondAttribute="centerX" id="dT9-Qc-wjc"/>
@@ -307,6 +320,7 @@
                     <connections>
                         <outlet property="addressLabel" destination="rLN-PH-Gst" id="blr-e7-4eD"/>
                         <outlet property="doneButton" destination="TgL-M6-zOL" id="7tY-E9-q72"/>
+                        <outlet property="goButton" destination="R1v-xN-nnf" id="GlS-xN-omA"/>
                         <outlet property="mapPinImage" destination="0Bk-ej-gFu" id="rRD-oR-tDN"/>
                         <outlet property="mapView" destination="ASw-gQ-Z9i" id="RzM-qZ-1ID"/>
                     </connections>
@@ -490,6 +504,7 @@
     </scenes>
     <resources>
         <image name="AZ" width="25" height="24"/>
+        <image name="GetDirection" width="50" height="50"/>
         <image name="Location" width="128" height="128"/>
         <image name="Photo" width="194.66667175292969" height="195.66667175292969"/>
         <image name="Pin" width="40" height="40"/>
